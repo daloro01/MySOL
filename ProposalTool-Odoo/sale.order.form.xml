@@ -1,0 +1,774 @@
+<?xml version="1.0"?>
+<form string="Sales Order" class="o_sale_order">
+	<style type="text/css">
+	        .myTableStyle
+	        {
+		       border-radius: 25px;
+		       border: 1px;
+		       padding: 10px;
+				cellpadding: 100px
+		      
+	        }
+	    </style>
+                <header>
+                    <button name="239" string="Create Invoice" type="action" class="btn-primary" attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+                    <button name="239" string="Create Invoice" type="action" context="{'default_advance_payment_method': 'percentage'}" attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"/>
+                    <button name="action_quotation_send" string="Send by Email" type="object" states="draft" class="btn-primary"/>
+                    <button name="print_quotation" string="Print" type="object" states="draft" class="btn-primary"/>
+                    <button name="action_confirm" states="sent" string="Confirm Sale" class="btn-primary o_sale_confirm" type="object"/>
+                    <button name="action_confirm" states="draft" string="Confirm Sale" class="o_sale_confirm" type="object"/>
+                    <button name="print_quotation" string="Print" type="object" states="sent,sale"/>
+                    <button name="action_quotation_send" string="Send by Email" type="object" states="sent,sale"/>
+                    <button name="action_cancel" states="draft,sent,sale" type="object" string="Cancel"/>
+                    <button name="action_draft" states="cancel" type="object" string="Set to Quotation"/>
+                    <button name="action_done" type="object" string="Lock" states="sale" help="If the sale is locked, you can not modify it anymore. However, you will still be able to invoice or deliver."/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            
+                            <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
+                            <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+                        </group>
+                        <group>
+                            <field name="date_order" attrs="{'invisible': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+                            <!-- ><field name="validity_date" attrs="{'invisible': [('state', 'in', ['sale', 'done'])]}"/> -->
+                            <field name="confirmation_date" attrs="{'invisible': [('state', 'in', ['draft', 'sent', 'cancel'])]}"/>
+                            <field name="pricelist_id" groups="product.group_sale_pricelist"/>
+                            
+							<!--<field name="payment_term_id" options="{'no_create': True}"/>-->
+						</group>
+                    </group>
+					<group string= "Customer Inputs">
+					<field name="partner_id" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>
+					<field name="x_CFEServiceNo" visible="1"/>
+					<field name="x_CFERatePlan" visible="1"/>
+					<field name="x_CFERegion" visible="1"/>
+					
+			<table class="myTableStyle">
+            <tr>
+               <td align="center">
+                  <b>Month</b>
+               </td>
+               <td align="center">
+                  <b>kwh</b>
+               </td>
+               <td align="center">
+                  <b>kwh $</b>
+               </td>
+               <td align="center">
+                  <b>IVA $</b>
+               </td>
+               <td align="center">
+                  <b>DAP $</b>
+               </td>
+               <td align="center">
+                  <b>DAP %</b>
+               </td>
+            </tr>
+            <tr>
+               <td align="center">1</td>
+               <td>
+                  <field name="x_Month1kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month1kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month1kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month1kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month1kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">2</td>
+               <td>
+                  <field name="x_Month2kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month2kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month2kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month2kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month2kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">3</td>
+               <td>
+                  <field name="x_Month3kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month3kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month3kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month3kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month3kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">4</td>
+               <td>
+                  <field name="x_Month4kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month4kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month4kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month4kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month4kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">5</td>
+               <td>
+                  <field name="x_Month5kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month5kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month5kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month5kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month5kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">6</td>
+               <td>
+                  <field name="x_Month6kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month6kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month6kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month6kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month6kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">7</td>
+               <td>
+                  <field name="x_Month7kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month7kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month7kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month7kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month7kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">8</td>
+               <td>
+                  <field name="x_Month8kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month8kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month8kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month8kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month8kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">9</td>
+               <td>
+                  <field name="x_Month9kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month9kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month9kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month9kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month9kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">10</td>
+               <td>
+                  <field name="x_Month10kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month10kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month10kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month10kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month10kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">11</td>
+               <td>
+                  <field name="x_Month11kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month11kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month11kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month11kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month11kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">12</td>
+               <td>
+                  <field name="x_Month12kwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month12kwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Month12kwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month12kwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Month12kwhdappct" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">Total</td>
+               <td>
+                  <field name="x_Monthtotalkwh" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Monthtotalkwhbill" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_Monthtotalkwhiva" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Monthtotalkwhdap" visible="1" />
+               </td>
+               <td>
+                  <field name="x_Monthtotalkwhdappct" visible="1" />
+               </td>
+            </tr>
+         </table>
+					</group>
+					<group String="System Specification">
+         <field name="x_Shading" visible="1" />
+         <field name="x_area" visible="1" />
+         <field name="x_radiationtype" visible="1" />
+         <field name="x_Irradiation" visible="1" />
+         <field name="x_Orientation" visible="1" />
+         <field name="x_Lossespct" visible="1" />
+         <field name="x_pvpanels" visible="1" />
+         <field name="x_inverters" visible="1" />
+         <field name="x_accapacity" visible="1" />
+         <field name="x_dccapacity" visible="1" />
+         <field name="x_monthly_radiation" invisible="1" domain="[('x_name','=',x_rad_name)]" />
+         <field name="x_pvpanelsno" visible="1" />
+         <field name="x_pvpanelsentered" visible="1" default="x_pvpanelsno" />
+         <field name="x_SystemSize" visible="1"/>
+         <field name="x_systemfactor" visible="1" />
+         <field name="x_rad_name" invisible="1" />
+      </group>
+      <group>
+         <table class="myTableStyle">
+            <tr>
+               <td align="center">
+                  <b>Month</b>
+               </td>
+               <td align="center">
+                  <b>Solar Radiation</b>
+               </td>
+               <td align="center">
+                  <b>Days in Month</b>
+               </td>
+               <td align="center">
+                  <b>Output (KWh/Month)</b>
+               </td>
+            </tr>
+            <tr>
+               <td align="center">1</td>
+               <td align="center">
+                  <field name="x_solarjanavg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solarjanout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">2</td>
+               <td align="center">
+                  <field name="x_solarfebavg" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_daysinfeb" visible="1" />
+               </td>
+               <td align="center">
+                  <field name="x_solarfebout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">3</td>
+               <td align="center">
+                  <field name="x_solarmaravg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solarmarout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">4</td>
+               <td align="center">
+                  <field name="x_solarapravg" visible="1" />
+               </td>
+               <td align="center">30</td>
+               <td align="center">
+                  <field name="x_solaraprout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">5</td>
+               <td align="center">
+                  <field name="x_solarmayavg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solarmayout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">6</td>
+               <td align="center">
+                  <field name="x_solarjunavg" visible="1" />
+               </td>
+               <td align="center">30</td>
+               <td align="center">
+                  <field name="x_solarjunout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">7</td>
+               <td align="center">
+                  <field name="x_solarjulavg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solarjulout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">8</td>
+               <td align="center">
+                  <field name="x_solaraugavg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solaraugout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">9</td>
+               <td align="center">
+                  <field name="x_solarsepavg" visible="1" />
+               </td>
+               <td align="center">30</td>
+               <td align="center">
+                  <field name="x_solarsepout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">10</td>
+               <td align="center">
+                  <field name="x_solaroctavg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solaroctout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">11</td>
+               <td align="center">
+                  <field name="x_solarnovavg" visible="1" />
+               </td>
+               <td align="center">30</td>
+               <td align="center">
+                  <field name="x_solarnovout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">12</td>
+               <td align="center">
+                  <field name="x_solardecavg" visible="1" />
+               </td>
+               <td align="center">31</td>
+               <td align="center">
+                  <field name="x_solardecout" visible="1" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">
+                  <b>Total</b>
+               </td>
+               <td align="center">
+                  <b>
+                     <field name="x_solarannavg" visible="1" />
+                  </b>
+               </td>
+               <td align="center">
+                  <b>
+                     <field name="x_solaryeardays" visible="1" />
+                  </b>
+               </td>
+               <td align="center">
+                  <b>
+                     <field name="x_solarannout" visible="1" />
+                  </b>
+               </td>
+            </tr>
+         </table>
+         </group>
+                    <notebook>
+                        <page string="Order Lines">
+                            <field name="order_line" mode="tree,kanban" attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
+                                <form string="Sales Order Lines">
+                                    <group>
+                                        <group>
+                                            <field name="product_id" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}" attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}"/>
+                                            <field name="layout_category_id" groups="sale.group_sale_layout"/>
+                                            <field name="invoice_status" invisible="1"/>
+                                            <field name="qty_to_invoice" invisible="1"/>
+                                            <field name="qty_delivered_updateable" invisible="1"/>
+                                            <field name="procurement_ids" invisible="1"/>
+                                            <field name="price_subtotal" invisible="1"/>
+                                            <label for="product_uom_qty" string="Ordered Quantity"/>
+                                            <div>
+                                                <field context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}" name="product_uom_qty" class="oe_inline"/>
+                                                <field name="product_uom" groups="product.group_uom" class="oe_inline oe_no_button" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}"/>
+                                            </div>
+                                            <label for="qty_delivered" string="Delivered Quantity" invisible="context.get('hide_sale')"/>
+                                            <div invisible="context.get('hide_sale')">
+                                                <field name="qty_delivered" attrs="{'readonly': [('qty_delivered_updateable', '=', False)]}"/>
+                                            </div>
+                                            <label for="qty_invoiced" string="Invoiced Quantity" invisible="context.get('hide_sale')"/>
+                                            <div invisible="context.get('hide_sale')">
+                                                <field name="qty_invoiced" invisible="context.get('hide_sale')"/>
+                                            </div>
+                                            <field name="price_unit"/>
+                                            <label for="discount" groups="sale.group_discount_per_so_line"/>
+                                            <div name="discount" groups="sale.group_discount_per_so_line">
+                                                <field name="discount" class="oe_inline"/> %
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                            <label for="customer_lead"/>
+                                            <div>
+                                                <field name="customer_lead" class="oe_inline"/> days
+                                            </div>
+                                            <label for="analytic_tag_ids"/>
+                                            <div>
+                                                <field name="analytic_tag_ids" widget="many2many_tags"/>
+                                            </div>
+                                        </group>
+                                    </group>
+                                    <label for="name"/>
+                                    <field name="name"/>
+                                    <div groups="base.group_no_one">
+                                        <label for="invoice_lines"/>
+                                        <field name="invoice_lines"/>
+                                    </div>
+                                    <field name="state" invisible="1"/>
+                                </form>
+                                <tree string="Sales Order Lines" editable="bottom" decoration-info="invoice_status=='to invoice'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                                    <field name="layout_category_id" groups="sale.group_sale_layout"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty" string="Ordered Qty" context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"/>
+                                    <field name="qty_delivered" invisible="context.get('hide_sale')" attrs="{'readonly': [('qty_delivered_updateable', '=', False)]}"/>
+                                    <field name="qty_invoiced" invisible="context.get('hide_sale')"/>
+                                    <field name="qty_to_invoice" invisible="1"/>
+                                    <field name="product_uom" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}" context="{'company_id': parent.company_id}" groups="product.group_uom" options="{&quot;no_open&quot;: True}"/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags"/>
+                                    <field name="price_unit" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                    <field name="price_subtotal" widget="monetary" groups="sale.group_show_price_subtotal"/>
+                                    <field name="price_total" widget="monetary" groups="sale.group_show_price_total"/>
+                                    <field name="qty_delivered_updateable" invisible="1"/>
+                                    <field name="procurement_ids" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="invoice_status" invisible="1"/>
+                                    <field name="customer_lead" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom" groups="product.group_uom"/>
+                                    <field name="price_subtotal"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <strong><span><t t-esc="record.product_id.value"/></span></strong>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 text-muted">
+                                                        <span><t t-esc="record.product_uom_qty.value"/> <t t-esc="record.product_uom.value"/></span>
+                                                    </div>
+                                                    <div class="col-xs-4 text-muted">
+                                                        <span class="pull-right text-right"><t t-esc="record.price_subtotal.value"/></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total"/>
+                                    <button name="button_dummy" states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <field name="note" class="oe_inline" placeholder="Setup default terms and conditions in your company settings."/>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Other Information">
+                            <group>
+                                <group string="Sales Information" name="sales_person">
+                                    <field name="user_id"/>
+                                    <field name="team_id" options="{'no_create': True}"/>
+                                    <field name="client_order_ref"/>
+                                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                                    <field name="project_id" attrs="{'invisible':[('state','=','sale')]}" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" groups="analytic.group_analytic_accounting"/>
+                                    <field name="related_project_id" attrs="{'readonly': ['|',('project_id','!=',False),('invoice_count','!=',0),('state','=','sale')],'invisible':[('state','!=','sale')]}" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" groups="analytic.group_analytic_accounting"/>
+                                </group>
+                                <group name="sale_pay" string="Invoicing">
+                                    <field name="fiscal_position_id" options="{'no_create': True}"/>
+                                    <field name="invoice_status" attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"/>
+                                </group>
+                                <group string="Reporting" name="technical" groups="base.group_no_one">
+                                    <field groups="base.group_no_one" name="origin"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group String="MySol Inputs">
+         <field name="x_labor" visible="1" />
+         <field name="x_BOS-elec" visible="1" />
+         <field name="x_BOS-mech" visible="1" />
+         <field name="x_Eng" visible="1" />
+         <field name="x_CFEInter" visible="1" />
+         <field name="x_PMXNRate" visible="1" />
+         <field name="x_MySolConfig" invisible="1" domain="[('x_ActiveFlag','=',True)]" />
+         <field name="x_savingspctyear1" visible="1" />
+         <field name="x_savings_target" visible="1" />
+         <field name="x_rateseason" visible="1" />
+         <field name="x_rateperiod" visible="1" />
+         <field name="x_tarifa2ranges" invisible="1" />
+         <field name="x_periodname" invisible="1" />
+         <field name="x_seasoname" invisible="1" />
+         <field name="x_regionname" invisible="1" />
+         <field name="x_tarifa2range" ininvisible="1" />
+         <field name="x_dac" invisible="1" />
+         <field name="x_cfetarifa2" invisible="1" />
+         <field name="x_cfefixedcost" visible="1" />
+         <field name="x_rateperkwh" visible="1" />
+         <field name="x_cfetotalkwhrate" visible="1" />
+         <field name="x_cfetotlbillyear1" invisible="1" />
+         <field name="x_cfetotlbillyear1dapiva" visible="1" />
+         <field name="x_savings_target" invisible="1" />
+         <field name="x_mysoltotalrate" visible="1" />
+         <field name="x_cferatekwhaftersolar" visible="1" />
+         <field name="x_cfebillaftersolar" visible="1" />
+         <field name="x_mysolcustpayment" visible="1" />
+         <field name="x_mysoltotalbillyear1" visible="1" />
+         <field name="x_distributioncost" visible="1" />
+         <field name="x_initialpayment" visible="1" />
+         <field name="x_monthlypayments" visible="1" />
+         <field name="x_paymentincrease" visible="1" />
+         <field name="x_paymentincrease" visible="1" />
+         <field name="x_dacrate" invisible="1" />
+         <field name="x_firstpaymentdate" visible="1" />
+         <field name="x_operatingexpense" visible="1" />
+      </group>
+                            <group>
+         <table class="myTableStyle">
+            <tr>
+               <td align="center">
+                  <b>Year</b>
+               </td>
+               <td align="center">
+                  <b>Annual Payments</b>
+               </td>
+            </tr>
+            <tr>
+               <td align="center">1</td>
+               <td align="center">
+                  <field name="x_annpayyear1" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">2</td>
+               <td align="center">
+                  <field name="x_annpayyear2" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">3</td>
+               <td align="center">
+                  <field name="x_annpayyear3" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">4</td>
+               <td align="center">
+                  <field name="x_annpayyear4" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">5</td>
+               <td align="center">
+                  <field name="x_annpayyear5" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">6</td>
+               <td align="center">
+                  <field name="x_annpayyear6" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">7</td>
+               <td align="center">
+                  <field name="x_annpayyear7" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">8</td>
+               <td align="center">
+                  <field name="x_annpayyear8" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">9</td>
+               <td align="center">
+                  <field name="x_annpayyear9" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">10</td>
+               <td align="center">
+                  <field name="x_annpayyear10" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">11</td>
+               <td align="center">
+                  <field name="x_annpayyear11" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">12</td>
+               <td align="center">
+                  <field name="x_annpayyear12" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">13</td>
+               <td align="center">
+                  <field name="x_annpayyear13" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">14</td>
+               <td align="center">
+                  <field name="x_annpayyear14" visible="true" />
+               </td>
+            </tr>
+            <tr>
+               <td align="center">15</td>
+               <td align="center">
+                  <field name="x_annpayyear15" visible="true" />
+               </td>
+            </tr>
+         </table>
+      </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+      
+                </form>
