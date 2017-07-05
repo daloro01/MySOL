@@ -1,0 +1,67 @@
+for n in range(0, 3):For n = 1 To leaseYrMAX 'iterate through each year of lease to compute operating expense (is not dependent on savingsRate or leaseMo
+     opExpensePerYrMXNs(n - 1) = opExpensePerYrMXN
+     opExpensePerYrMXN = opExpensePerYrMXN * (1 + inflationRate)
+ Next n
+ 
+ 'iterate through all combinations of savingsRate and leaseMo and compute the initialPayment from customer required to allow Equity Investor to realize their reqIRR
+ For Each savingsRate In savingsRates
+     mySolRate = cfeRate * (1 - savingsRate) 'per kWh rate to realize savingsRate
+     
+     carriedLossain = sysFundPrice * mySolEquity * -1 'carried losses used to offset Fund income tax
+     custYrPymt = mySolRate * sysProd * (1 + iva) 'customer first year payment including IVA
+     ReDim fundYrNetCashFlows(leaseYrMAX)
+     For n = 1 To leaseYrMAX 'iterate through each year of lease to compute year-specific Fund net cash flows
+         taxBasis = custYrPymt + carriedLossain - opExpensePerYrMXNs(n - 1)
+         tax = WorksheetFunction.Min(0, -taxBasis * corpTaxRate)
+         fundYrNetCashFlows(n - 1) = custYrPymt + tax - opExpensePerYrMXNs(n - 1)
+         
+         carriedLossain = WorksheetFunction.Min(0, taxBasis * (1 + inflationRate))
+         custYrPymt = custYrPymt * (1 + finYrIncr)
+     Next n
+     
+     'compute monthly net cash flows to Fund
+     ReDim fundMoNetCashFlows(leaseMoMAX)
+     fundMoNetCashFlows(0) = 0
+     For n = 1 To leaseMoMAX
+         fundMoNetCashFlows(n) = fundYrNetCashFlows(WorksheetFunction.RoundUp(n / 12, 0) - 1) / 12
+     Next n
+     
+     For Each leaseMo In leaseMos
+         ReDim dateArray(leaseMo)
+         ReDim dateAsDoubleArray(leaseMo)
+         ReDim valueArray(leaseMo)
+         pymtDate = firstMoPymtDate
+         For n = 0 To leaseMo
+             dateArray(n) = pymtDate
+             dateAsDoubleArray(n) = DateValue(pymtDate)
+             valueArray(n) = fundMoNetCashFlows(n)
+             pymtDate = WorksheetFunction.EoMonth(pymtDate, 0) + 1
+         Next n
+         
+         'compute NPV of Fund cash flows and compute initalPayment from Customer to allow Equity Investor to realize reqIRR
+         xnpv = myXNPV(reqIRR, valueArray, dateAsDoubleArray)
+         initialPayment = sysFundPrice - xnpv
+         If initialPayment < 0 Then
+             initialPayment = 0
+         Else
+             initialPayment = initialPayment + pxAfterTaxEGuageMXN
+         End If
+         
+         leaseYr = leaseMo / 12
+         If leaseYr < leaseYrMAX Then
+             opExpenseToFrontloadMXN = 0
+             For n = leaseYr To leaseYrMAX
+                 opExpenseToFrontloadMXN = opExpenseToFrontloadMXN + opExpensePerYrMXNs(n)
+             Next n
+             initialPayment = initialPayment + opExpenseToFrontloadMXN
+         End If
+         
+         'populate output table
+         Worksheets("Inputs").Range("Table_DataStart").Offset(nrow, ncol).Value = initialPayment
+         
+         ncol = ncol + 1
+     Next leaseMo
+     
+     nrow = nrow + 1
+     ncol = 0
+ Next savingsRate
