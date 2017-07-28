@@ -1,0 +1,16 @@
+Significant Changes
+(1) Choose Variable for Scenarios
+On the Inputs worksheet, there is a new field Choose Variable that allows user to choose from two values in a drop-down list:  "Initial Payment" or "Final Payment".  This field controls the output of the Generate Scenarios button.  If "Initial Payment" is selected, then the tool behaves as previously:  it populates the Savings Rate / Lease Term metrix with the initial payment required from customer for each combination.  If "Final Payment" is selected, then the field below "Initial Payment" becomes available.  Populate this field with the amount, in pesos, that a customer is willing/able to pay up-front.  Then, click on Generate Scenarios button to populate the matrix with Final Payment values required for all combinations of Savings Rate / Lease Term, given the up-front payment specified.  As before, choose the Savings Rate and Lease Term of interest from the drop-down lists in Cells V3 and V4 to populate the Proposal worksheets accordingly.
+
+(2) Recommend Systems
+On the Inputs worksheet, there is a new button, "Recommend Systems".  After completing Customer Inputs (e.g. CFE Rate Category, Sun Hours, Other Loss %, Customer Usage), clicking Recommend Systems will casue a pop-up window to appear with recommended systems.  For DAC customers there will be two options:  "MaxOffset", which is a system designed to produce as much energy as Customer Usage, and "Basico", which is a system designed to reduce consumption from CFE to the Basico level for applicable Tarifa 1 category.  For Tarifa 2, only the MaxOffset option will appear.  Double-click on one of the systems to populate the System Specification section of the Inputs worksheet, or close the pop-up and specify the system manually.
+
+(3) State
+The State field on the Inputs worksheet is now a drop-down list of all Mexican states.  If you choose CDMX, then Sun Hours is set to 5.46 and Other Loss % is set to 18.00%.  If you choose Gto., then Sun Hours is set to 5.86 and Other Loss % is set to 12.00%.  For all other values, Other Loss % is set to 12.00%.
+
+(4) System Monitoring
+The System Monitoring fields in the System Specification section of the Inputs worksheet changes based on the Inverter Model but can be manually overwritten if desired.
+
+(5) Proposals
+At the bottom of the second page of both Proposal worksheets, the MySOL Subscription  section has been changed to include an estimate of CFE Bill over the next 15 years and formatting changed slightly.
+
