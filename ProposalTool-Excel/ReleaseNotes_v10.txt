@@ -1,0 +1,19 @@
+Significant Changes
+
+(1) Configurable Output Matrix
+Previously, this was hard-coded at 1% to 25%.  Now you can choose the Minimum, Maximum and Increment.  For example, values of -10%, +10%, and 2% would cause the Generate Scenario button to generate scenarios for:  { -10%, -8%, -6%, -4%, -2%, 0%, +2%, +4%, +6%, +8%, +10% }.  This feature will allow you to create a "0 Down" option for any circumstance, even those that require the Customer to pay a higher per kWh rate than CFE in Year 1 (i.e. negative Savings Rate)
+
+(2) Automated Sun Hours Calculation
+Previously, Sun Hours was a free input field, requiring the user to estimate Sun Hours for a given customer.  Now, users can choose from a list of 24 (and growing) Mexico cities, Azimuth of PV Panels and Tilt of PV Panels for a given project.  In doing so, the Proposal Tool will automatically compute the Sun Hours given those three inputs and populate the Sun Hours field.  Users can still overwrite that field with their own value.
+
+(3) CFE Rate Period Selection
+Previously, the CFE Rate Period on which Savings Rates are based was controlled by MySOL.  Now, the user can choose a specific month over the last year, or choose "Promedio de 12 Meses" or "Promedio Ponderado" to use the simple average or usage-weighted average, respectively.
+
+(4) CFE Monthly History
+Previously, the user entered annual Customer Usage (kWh/yr).  Now, the user must enter a 12-month history of Customer Usage.  This level of granularity is required to compute Promedio Ponderado for the CFE Rate Period, as well as other supporting charts to help the Customer better understand what to expect with a MySOL Service Plan.  If a Customer doesn't have sufficient history or expects future usage to be significantly different from the past, the user may enter expected monthly usage in a single cell in monthly usage history and annual usage will be estimated as 12 times that value.
+
+(5) CFE Region
+Previously, the user selected from a list of CFE Regions.  Now, CFE Region is populated automatically based on State.
+
+(6) Pricing
+Updated Labor & Materials pricing with the latest data, which makes MySOL proposals more competitive.
