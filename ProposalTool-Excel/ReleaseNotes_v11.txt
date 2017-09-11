@@ -1,0 +1,31 @@
+(1) Dynamic MySOL Markup
+-- Previously, the MySOL markup was driven by an input in the Inputs_MySOL worksheet.  Now, it is dynamic, computed as the maximum that still allows 20% savings/15 years on DAC (17% for Tarifa2) subject to minimum of 15% and maximum of 30%.
+
+(2) Changes to make consistent with DG's model:
+-- Inflation Rate:  increased from 3.00% to 4.00% (DG is at 5.00%)
+-- System Annual Degradation Rate:  increased from -0.50% to -0.70% (DG is at -0.70%)
+-- Financing Escalator:  remained at 3.50% (DG is at 5.00%)
+-- Operating Expense (USD/kW):  increased from 12.00 to 20.00 (DG is at 28.00)
+-- Annual Standard Default Rate(%):  introduced this variable which reduces top line revenue by that percent.  We are using DG's value of 2.00%.
+-- Inverter Replacement Expense:  introduced this variable which is paid by fund over & above O&M.  We are using DG's assumptions:  inverter replaced in Year 12 at cost equal to current cost in Components sheet for given System Specification, decreasing at annual rate of 3.19% (which results in the 30% discount by Year 12 as specified in DG Model) but increasing at annual Inflation Rate of 4.00%, plus SPP Markup plus IVA.
+-- Equipment Replacement Reserve Cost:  introduced this variable, which is paid by fund over & above O&M.  It is USD/W of System Size but set to 0.00 in our model as it seems redundant to O&M & Inverter costs (DG is at 0.01)
+-- Minimum term:  increased from 5 years to 6 years, as per DG
+-- eliminated any O&M or other contractual obligations beyond term-end.  Previously, we front- or back-loaded O&M payments for Terms < 15 years and, in return, committed to O&M for 15 years regardless of term length.  Now, we assume that any relationship between Customer and MySOL/Fund ends at term-end.  Updated the relevant sections in Proposal sheets (i.e. Remote Monitoring & Repair Service benefits)
+-- Performance guarantee for five years only (O&M continues through end of term)
+
+(3) CFE Monthly History
+-- Now require all values to be completed; if not, an error is displayed.  I included guidance in a Comment attached to the relevant cell in Inputs, as well as in the Instructions.
+
+(4) Labor & BOS Rates (MXN/W)
+-- In the Inputs worksheet, user is now able to change the MXN/W values for Labor, BOS-Electrical, and BOS-Mechanical.  Previously, these were hard-coded by MySOL.  The "MySOL Default" rates are still displayed on the Inputs sheet.
+
+(5) Recommend Systems
+-- In determining the lowest cost system to recommend when Recommend Systems button clicked, the system monitoring costs for Micro-Inverters was incorrectly computed.  Bug fixed.
+-- Previously, only systems using Micro-Inverters could have an Inverter Quantity > 1; now, the code considers using multiple inverters for any inverter type.  The impact is that, previously, systems too large for a single non-micro inverter to accommodate would use only Micro-Inverters.
+
+(6) Minor Changes
+-- locked Sun Hours and made it a lookup formula based on Sun Hours City, Azimuth and Tilt.  Previously, this would happen programmatically but user could still overwrite.
+-- Updated Components with latest PV Panels/Prices for Exel from Robert
+-- Updated CFE Rates to include September, 2017
+-- Eliminated Import Duty as the PV Panel pricing from Excel includes that.
+-- Introduced variable in Inputs_MySOL, "Insurance for PV Panels", with a value of 0.2263% as per Rafa.  This is applied only to PV Panel components.
