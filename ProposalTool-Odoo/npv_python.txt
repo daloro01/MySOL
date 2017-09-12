@@ -1,11 +1,35 @@
-for n in range(0, 3):For n = 1 To leaseYrMAX 'iterate through each year of lease to compute operating expense (is not dependent on savingsRate or leaseMo
-     opExpensePerYrMXNs(n - 1) = opExpensePerYrMXN
-     opExpensePerYrMXN = opExpensePerYrMXN * (1 + inflationRate)
- Next n
+cr = self.env.cr
+cr.execute("select max(x_value)/12 leaseYrMAX  from x_leasemonths")
+res = cr.fetchone()
+leaseYrMAX = res[0]
+opExpensePerYrMXNs = list()
+cr.execute("select x_value from x_savingrates")
+savings = list()
+
+for i,row in enumerate(cr.fetchall()):
+   savings.append(row[i])
+
+
+
+#iterate through each year of lease to compute operating expense (is not dependent on savingsRate or leaseMo
+
+
+
+for record in self:
+	opExpensePerYrMXN = record.x_operatingexpense
+	inflationRate = record.x_MySolConfig.browse(14).x_inflation
+	mySolEquity =  (record.x_MySolConfig.browse(14).x_EquityInvestor/100)
+	sysFundPrice = record.x_FundPrice
+	mySolRate = record.x_mysoltotalrate
+	for n in range(1, leaseYrMAX): 
+		opExpensePerYrMXNs.append(opExpensePerYrMXN) 
+     	opExpensePerYrMXN = opExpensePerYrMXN * (1 + inflationRate)
+
+	record['x_initialpayments'] = '\n'.join(map(str,opExpensePerYrMXNs))
+
  
  'iterate through all combinations of savingsRate and leaseMo and compute the initialPayment from customer required to allow Equity Investor to realize their reqIRR
  For Each savingsRate In savingsRates
-     mySolRate = cfeRate * (1 - savingsRate) 'per kWh rate to realize savingsRate
      
      carriedLossain = sysFundPrice * mySolEquity * -1 'carried losses used to offset Fund income tax
      custYrPymt = mySolRate * sysProd * (1 + iva) 'customer first year payment including IVA

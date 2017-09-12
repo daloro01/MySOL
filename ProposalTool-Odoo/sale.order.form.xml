@@ -661,7 +661,10 @@
          <field name="x_paymentincrease" visible="1" />
          <field name="x_dacrate" invisible="1" />
          <field name="x_firstpaymentdate" visible="1" />
+         <field name="x_SystemSize" visible="1" />
          <field name="x_operatingexpense" visible="1" />
+         <field name="x_leasemonths" visible="1" />
+         <field name="x_initialpayments" visible="1" />
       </group>
                             <group>
          <table class="myTableStyle">

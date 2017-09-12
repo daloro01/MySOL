@@ -1,0 +1,2 @@
+CREATE USER mysol WITH PASSWORD 'T8p8DGpGjP' SUPERUSER;
+psql mysol  -h 127.0.0.1 -d eydsys_mysol
