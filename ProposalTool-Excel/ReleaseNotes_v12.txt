@@ -1,0 +1,19 @@
+(1) Savings Rate
+-- Previously, the Savings Rate, e.g. 10%, was applied to the Pre-IVA CFE Rate to compute the MySOL Rate on which the MySOL Proposal was based.  Given residual energy purchased from CFE, taxes and cargo fijo this resulted in an "After MySOL" total annual cost (CFE + MySOL) that generated less savings than expected.  This was causing confusion among customers and SPPs.  Now, the Savings Rate selected results in a "After MySOL" total bill that generates exactly the expected savings versus "Before MySOL" CFE Bill.
+
+(2) CFE Regions
+-- Previously, we had a one-to-one map from State to CFE Region.  However, based on information from Oscar at Kiin, we realized that (1) the mapping was incorrect and (2) some states have multiple CFE Regions.  Now, when User updates State, the CFE Region is populated with a drop-down list of valid values for that State.  e.g. VER - Veracruz has both "Norte y Noreste" and "Sur y Peninsular".
+
+(3) Sun Hours City
+-- Previously, there were 81 Sun Hours City values, however, this included two duplicates as well as all 16 boroughs of CDMX which had nearly identical irradiance data.  These have been eliminated such that there are now only 64 unique values.
+-- Values now include as a prefix of the State in which they reside, e.g. "YUC - Merida".  This allows the location of cities to be more easily identified and causes cities in the same state to be grouped together.
+
+(4) Final Payment
+-- Previously, for all Initial Payment scenarios, the Final Payment was a nominal value of MXN 100.  Now, for all Terms <= 10 Years, the Final Payment is 5% of System Fund Price.  For terms greater than 10 Years (currently only 15 Years), the value is still MXN 100.  This is because 5% of the System Fund Price discounted 15 years at our current relatively high cost of capital is insignificant, so there's little benefit to the proposal and it robs us of the marketing message that customer owns the system for (practically) free.
+
+(5) Proposals
+-- As per Robert's request, I added the Proposal Tool version number to the footer of the Proposal, e.g. "v12"
+-- Changed the Savings vs Before MySOL from a dollar value to a percent, since that percent now exactly matches expectations
+
+(6) Debt Investor
+-- Added significant functionality and flexibility to model the introduction of a debt investor.  This does not have any impact on the protected version as we are not yet selling that product.
